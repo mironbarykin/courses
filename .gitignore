@@ -1,0 +1,10 @@
+__pycache__/
+.env
+.venv
+env/
+venv/
+.idea
+.vscode
+
+# Folder containing the pictures for the project
+gtsrb
