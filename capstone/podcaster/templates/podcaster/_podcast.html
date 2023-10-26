@@ -1,0 +1,38 @@
+{% extends "podcaster/layout.html" %}
+{% block body %}
+{% load static %}
+    <div class="podcast-heading">
+        <div class="podcast-name"><h1>{{ podcast.name }}</h1> <h6>by <i>{{ podcast.author.username }}</i> in {{ podcast.date }}</h6></div>
+    </div>
+    <div class="podcast-subscribers-info">
+        {% if requester == podcast.author %}
+        <span class="podcast-subs">{{ podcast.subscribers.count }} {% if podcast.subscribers.count == 1 %} subscriber {% else %} subscribers {% endif %}</span>
+        {% endif %}
+        <form action="{% url 'podcast' id=podcast.id %}" method="post">
+            {% csrf_token %}
+            {% if user.is_authenticated %}
+                {% if requester in podcast.subscribers.all %}
+                    <input type="hidden" name="action" value="unsubscribe">
+                    <input src="{% static 'tick.png' %}" width="52" height="52" type="image" value="">
+                {% else %}
+                    <input type="hidden" name="action" value="subscribe">
+                    <input src="{% static 'plus.png' %}" width="52" height="52" type="image" value="">
+                {% endif %}
+            {% endif %}
+        </form>
+    </div>
+    <div class="podcast-content">
+        <div class="podcast-image"><img class="img-thumbnail" src="{{ podcast.image }}" alt=""></div>
+        <div class="podcast-description">{{ podcast.description }}</div>
+        <div class="podcast-episodes">
+            <div class="podcast-episodes-list">
+                <h3>Episodes : </h3>
+                <ul>
+                    {% for episode in podcast.episodes.all %}
+                        <li><a href="{% url 'episode' id=episode.id %}">{{ episode.name }}</a> <i>in {{ episode.date }}</i></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

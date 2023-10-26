@@ -1,0 +1,19 @@
+{% extends "podcaster/layout.html" %}
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row gx-5">
+        {% for episode in episodes %}
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ episode.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">by <i><a href="{% url 'podcast' id=episode.podcast.id %}">{{ episode.podcast.name }}</a></i> in {{ episode.date }}</h6>
+                <p class="card-text">{{ episode.description }}</p>
+                <a href="{% url 'episode' id=episode.id %}" class="btn btn-primary">Visit</a>
+              </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

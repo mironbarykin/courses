@@ -1,0 +1,33 @@
+{% extends "network/layout.html" %}
+
+{% block title %} Profile {% endblock %} 
+
+{% block body %}
+    <div class="profile-top-view">
+        <h1 class="username-data" id="{{userdisplayed_user.id}}">{{ userdisplayed_user.username }}</h1>
+        <span id="follow-data">
+            Followers: <b>{{ userdisplayed_user.count_followers }}</b> 
+            Following: <b>{{ userdisplayed_user.count_following }}</b><br>
+            {% if user.is_authenticated %}
+            {% if userdisplayed_user.id != request.user.id %}
+            {% if user in userdisplayed_user.followers.all %}
+            <button class="btn btn-primary" id="follow-button">Unfollow!</button>
+            {% else %}
+            <button class="btn btn-primary" id="follow-button">Follow!</button>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+        </span>
+    </div>
+    <div id="posts-view-profile"></div><br>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" id="paginator-previous">Previous</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" id="paginator-next">Next</a>
+          </li>
+        </ul>
+    </nav>
+{% endblock %}

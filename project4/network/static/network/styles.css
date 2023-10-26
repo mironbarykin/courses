@@ -1,0 +1,25 @@
+.create-post-div {
+    padding: 5px;
+    
+    border: 0.2px solid #9c9c9c;
+    border-radius: 8px;
+}
+
+
+.body {
+    padding: 0.5rem 1rem;
+}
+
+.post {
+    padding: 5px;
+    margin-top: 2px;
+    border: 0.2px solid #9c9c9c;
+    border-radius: 8px;
+}
+
+.post-like{
+    width: 20px; 
+    height: 20px;
+
+    filter: brightness(0);
+}

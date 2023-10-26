@@ -1,0 +1,71 @@
+{% extends "podcaster/layout.html" %}
+{% block body %}
+{% load static %}
+    <div class="episode-heading">
+        <div class="episode-name"><h1>{{ episode.name }}</h1> <h6>by <i><a href="{% url 'podcast' id=episode.podcast.id %}">{{ episode.podcast.name }}</a></i> in {{ episode.date }}</h6></div>
+    </div>
+
+    <div class="episode-like-info">
+        {% if requester == episode.podcast.author %}
+        <div class="episode-like-count">{{ episode.liked_by.count }} {% if episode.liked_by.count == 1 %} like {% else %} likes {% endif %}</div>
+        {% endif %}
+        <div class="" style="display: flex">
+            <form action="{% url 'episode' id=episode.id %}" method="post">
+                {% csrf_token %}
+                {% if user.is_authenticated %}
+                    {% if requester in episode.liked_by.all %}
+                        <input type="hidden" name="action" value="unlike">
+                        <input src="{% static 'like_active.png' %}" width="52" height="48" type="image" value="">
+                    {% else %}
+                        <input type="hidden" name="action" value="like">
+                        <input src="{% static 'like_inactive.png' %}" width="52" height="48" type="image" value="">
+                    {% endif %}
+                {% endif %}
+            </form>
+            <form action="{% url 'episode' id=episode.id %}" method="post">
+                {% csrf_token %}
+                {% if user.is_authenticated %}
+                    {% if requester in episode.queuned_users.all %}
+                        <input type="hidden" name="action" value="unqueue">
+                        <input src="{% static 'tick.png' %}" width="52" height="52" type="image" value="">
+                    {% else %}
+                        <input type="hidden" name="action" value="queue">
+                        <input src="{% static 'plus.png' %}" width="52" height="52" type="image" value="">
+                    {% endif %}
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    <div class="episode-content">
+        <div class="episode-info">
+            <div class="episode-image"><img class="img-thumbnail" src="{{ episode.image }}" ></div>
+            <div class="episode-description">{{ episode.description }}</div>
+        </div>
+        <div class="episode-comments">
+            {% if user.is_authenticated %}
+            <div class="episode-comment-create">
+                <form action="{% url 'episode' id=episode.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="comment">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="content" placeholder="Comment">
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Place Comment">
+                </form>
+            </div>
+            {% endif %}
+            <div class="episode-comments-list">
+                <ul>
+                    {% for comment in episode.comments.all %}
+                        <li>{{ comment.content }}<br><i>{{ comment.author.username }}</i></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="sticky-bottom" style="background: white;">
+        <audio controls>
+            <source src="/media/{{ episode.audio }}" type="audio/mp3">
+        </audio>
+    </div>
+{% endblock %}
